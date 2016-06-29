@@ -13,6 +13,7 @@ db getspfreq(Mat I);
 void GLCM(Mat src,Mat dest,int d);
 db getcontrast(Mat I);
 db getentropy(Mat I);
+Mat cropimg(Mat src);
 
 int main( int argc, char** argv )
 {
@@ -22,10 +23,11 @@ int main( int argc, char** argv )
 	//Moments mol,moa,mob;
 	Scalar avg,stddev,av,st;
 	Scalar mu[7],dev[7],skew[7],kurt[7],var[7],spfreq[7],contrast[7],entropy[7];
- 	src = imread( argv[1], 1 );
- 	resize(src,src,Size(650,560));
-    	r=src.rows; c=src.cols;
-    	getroi(roi,r,c);
+ 	src= imread( argv[1], 1 );
+    src=cropimg(src);
+    resize(src,src,Size(650,560));
+    r=src.rows; c=src.cols;
+    getroi(roi,r,c);
  	cvtColor( src, dest, CV_BGR2Lab );
  	for(int j=0;j<7;j++){
  		rectangle(src,roi[j],Scalar(0,0,255));
@@ -66,6 +68,23 @@ int main( int argc, char** argv )
  	imshow("src",src);
  	waitKey(0);
  	return 0;
+}
+
+bool cmpare(std::vector<cv::Point> x,std::vector<cv::Point> y){
+    return(fabs(contourArea(Mat(x)))>fabs(contourArea(Mat(y))));
+}
+
+Mat cropimg(Mat src){
+    Mat img=src.clone();
+    cvtColor(img,img,CV_BGR2GRAY);
+    threshold(img,img,10,255,CV_THRESH_BINARY);
+    GaussianBlur(img,img,Size(21,21),0,0);
+    vector<vector<Point> > contours;
+    vector<Vec4i> hierarchy;
+    findContours(img,contours,hierarchy,CV_RETR_TREE,CV_CHAIN_APPROX_SIMPLE);
+    std::sort(contours.begin(),contours.end(),cmpare);
+    Mat dest=src(boundingRect(contours[0]));
+    return dest;
 }
 
 void getroi(Rect roi[7],int r,int c){
