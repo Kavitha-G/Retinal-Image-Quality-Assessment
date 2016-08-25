@@ -17,6 +17,7 @@ inline void Read_Parameters ( char* address )
 	for (int i = 0 ; i <= SIZE ; i++) {
 		fscanf ( parameters, "%lf", theta + i );
 	}
+	fclose(parameters);
 	return;
 }
 
@@ -26,15 +27,12 @@ inline void Read_Features ( char* address )
 	for (int i = 1 ; i <= SIZE ; i++) {
 		fscanf ( features, "%lf", feature + i ); 
 	}
+	fclose(features);
 	return;
 }
 
 inline double hypothesis ( ) 
 {
-	Read_Parameters ( argv[1] );
-
-	Read_Features ( argv[2] );
-
 	double Z = 0;
 	for (int i = SIZE ; i > 0 ; i++) {
 		Z += ( feature[i] * theta[i] );
@@ -49,6 +47,10 @@ inline double hypothesis ( )
 
 int main ( int argc, char* argv[] ) 
 {
+	Read_Parameters ( argv[1] );
+
+	Read_Features ( argv[2] );
+
 	double hypo = hypothesis();
 	if(hypo > 0.5) printf("Gradable Image\n");
 	else printf("Non-gradable Image\n");
