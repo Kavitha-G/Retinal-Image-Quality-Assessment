@@ -2,10 +2,10 @@
 Analyse adequacy of a retinal image
 
 ## Source
-feature.cpp<br>
+* <b>feature.cpp</b><br>
 Reads in an image of the retina and calculates the feature vector values
 
-result.cpp<br>
+* <b>result.cpp</b><br>
 Takes in the feature vector and the coefficient vector(theta calculated using logistic regression) and declares whether the image is gradable or not
 
 ## Dependencies
@@ -13,16 +13,16 @@ Takes in the feature vector and the coefficient vector(theta calculated using lo
 
 ## Trial
 
-Run: 
+Run:
 ```
 $ make all
 $./AssessImage.sh /path/to/retinal_image
 ```
 
-## Sample Run
+For a sample run,
 ```
 $ make all
-$ ./AssessImage.sh Images/1.jpg
+$ ./AssessImage.sh SampleImages/1.jpg
 ```
 ## Output:
 Ungradable Retinal Image<br>
